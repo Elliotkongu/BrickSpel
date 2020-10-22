@@ -17,17 +17,16 @@ public class BrickGame extends JFrame {
     JPanel panel = new JPanel();
     JButton newGameButton = new JButton("Nytt spel");
     List<JButton> buttonList;
-    JButton selectedButton;
     //For testing purposes
     JButton winButton = new JButton("Sortera rätt (Debug)");
 
     public BrickGame() {
-        //Add the panel and newGame button to the window.
+        //Add the panel, new game and win buttons to the window.
         add("Center", panel);
         add("North", newGameButton);
         add("South", winButton);
 
-        //Shuffle the the list of buttons and add them to the panel
+        //Set up the panel layout
         panel.setLayout(new GridLayout(4, 4));
         newGame();
         newGameButton.addActionListener(new buttonListener());
@@ -61,7 +60,7 @@ public class BrickGame extends JFrame {
     }
 
     /**
-     * Randomise all the buttons on the board again.
+     * Randomise and set up the tile on the board again.
      */
     private void newGame() {
         randomiseButtons();
@@ -71,26 +70,11 @@ public class BrickGame extends JFrame {
             panel.add(jButton);
             jButton.addActionListener(new buttonListener());
         }
-        selectedButton = null;
     }
 
     /**
-     * Searches the button list and returns the index of the empty block
-     *
-     * @return Index of the empty block
-     */
-    private int getEmpty() {
-        for (int i = 0; i < buttonList.size(); i++) {
-            if (buttonList.get(i).getText().equals("")) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Checks if the button pressed is eligible to be swapped with the empty tile.
-     * @param button The clicked button
+     * Checks if the tile pressed is eligible to be swapped with the empty tile.
+     * @param button The clicked tile
      */
     private void eligibleClick(JButton button) {
         int index = buttonList.indexOf(button);
@@ -112,9 +96,9 @@ public class BrickGame extends JFrame {
     }
 
     /**
-     * Checks if the tile on the checkIndex spot is the empty tile, if it is then swap the two.
+     * Checks if the tile on the checkIndex spot is the empty tile, if it is then swap with the clicked tile.
      * @param checkIndex The index that's going to be checked
-     * @param button The clicked button
+     * @param button The clicked tile
      */
     private void checkEmpty(int checkIndex, JButton button) {
         JButton checkButton = buttonList.get(checkIndex);
