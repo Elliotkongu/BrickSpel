@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Elliot Åberg Fält
@@ -27,28 +31,39 @@ public class BrickGame extends JFrame {
     JButton button15 = new JButton("15");
     JButton button16 = new JButton();
     JButton newGame = new JButton("Nytt spel");
+    boolean isSelected = false;
+    List<JButton> buttonList;
+
+    private List<JButton> randomiseButtons() {
+        List<JButton> buttonList = new ArrayList<>();
+        buttonList.add(button1);
+        buttonList.add(button2);
+        buttonList.add(button3);
+        buttonList.add(button4);
+        buttonList.add(button5);
+        buttonList.add(button6);
+        buttonList.add(button7);
+        buttonList.add(button8);
+        buttonList.add(button9);
+        buttonList.add(button10);
+        buttonList.add(button11);
+        buttonList.add(button12);
+        buttonList.add(button13);
+        buttonList.add(button14);
+        buttonList.add(button15);
+        buttonList.add(button16);
+        Collections.shuffle(buttonList);
+        return buttonList;
+    }
 
     public BrickGame() {
-        setLayout(new BorderLayout());
-        add("North", panel);
-        add("South", newGame);
+        add("South", panel);
+        add("North", newGame);
+        buttonList = randomiseButtons();
         panel.setLayout(new GridLayout(4,4));
-        panel.add(button1);
-        panel.add(button2);
-        panel.add(button3);
-        panel.add(button4);
-        panel.add(button5);
-        panel.add(button6);
-        panel.add(button7);
-        panel.add(button8);
-        panel.add(button9);
-        panel.add(button10);
-        panel.add(button11);
-        panel.add(button12);
-        panel.add(button13);
-        panel.add(button14);
-        panel.add(button15);
-        panel.add(button16);
+        for (JButton jButton : buttonList) {
+            panel.add(jButton);
+        }
 
         //Finishing touches
         pack();
