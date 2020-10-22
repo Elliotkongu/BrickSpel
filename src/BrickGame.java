@@ -19,7 +19,7 @@ public class BrickGame extends JFrame {
     List<JButton> buttonList;
     JButton selectedButton;
     //For testing purposes
-    JButton winButton = new JButton("Vin spelet (Debug)");
+    JButton winButton = new JButton("Sortera rätt (Debug)");
 
     public BrickGame() {
         //Add the panel and newGame button to the window.
@@ -28,7 +28,7 @@ public class BrickGame extends JFrame {
         add("South", winButton);
 
         //Shuffle the the list of buttons and add them to the panel
-        panel.setLayout(new GridLayout(4,4));
+        panel.setLayout(new GridLayout(4, 4));
         newGame();
         newGameButton.addActionListener(new buttonListener());
         winButton.addActionListener(new buttonListener());
@@ -36,7 +36,7 @@ public class BrickGame extends JFrame {
         //Finishing touches
         pack();
         setVisible(true);
-        setLocation(500,500);
+        setLocation(500, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -52,22 +52,33 @@ public class BrickGame extends JFrame {
         Collections.shuffle(buttonList);
     }
 
+    /**
+     * Show a message dialog that you have won the game and then exit
+     */
     private void winTheGame() {
         JOptionPane.showMessageDialog(null, "Du vann!");
         System.exit(0);
     }
 
+    /**
+     * Randomise all the buttons on the board again.
+     */
     private void newGame() {
         randomiseButtons();
         panel.removeAll();
         panel.revalidate();
-        for (JButton jButton:buttonList) {
+        for (JButton jButton : buttonList) {
             panel.add(jButton);
             jButton.addActionListener(new buttonListener());
         }
         selectedButton = null;
     }
 
+    /**
+     * Searches the button list and returns the index of the empty block
+     *
+     * @return Index of the empty block
+     */
     private int getEmpty() {
         for (int i = 0; i < buttonList.size(); i++) {
             if (buttonList.get(i).getText().equals("")) {
@@ -77,13 +88,43 @@ public class BrickGame extends JFrame {
         return -1;
     }
 
-    private void eligibleClick() {
+    private void eligibleClick(JButton button) {
+        int index = buttonList.indexOf(button);
+        if (index % 4 != 0) {
+            checkEmpty(index - 1, button);
+        }
 
+        if (index - 4 >= 0) {
+            checkEmpty(index - 4, button);
+        }
+
+        if (index % 4 != 3) {
+            checkEmpty(index + 1, button);
+        }
+
+        if (index + 4 < buttonList.size()) {
+            checkEmpty(index + 4, button);
+        }
     }
 
+    private void checkEmpty(int checkIndex, JButton button) {
+        JButton checkButton = buttonList.get(checkIndex);
+        if (checkButton.getText().equals("")) {
+            checkButton.setText(button.getText());
+            button.setText("");
+        }
+    }
+
+    /**
+     * Checks if the blocks are in the correct order (1-15 with empty being last) and
+     * runs the winTheGame method if they are.
+     */
     private void checkWinCondition() {
-        for (int i = 0; i < buttonList.size()-1; i++) {
-            if (Integer.parseInt(buttonList.get(i).getText()) != (i+1)) {
+        for (int i = 0; i < buttonList.size() - 1; i++) {
+            JButton button = buttonList.get(i);
+            if (button.getText().equals("")) {
+                return;
+            } else if (Integer.parseInt(button.getText()) != (i + 1)) {
                 return;
             }
         }
@@ -94,18 +135,15 @@ public class BrickGame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getSource() != newGameButton && ae.getSource() != winButton) {
-                System.out.println(((JButton)ae.getSource()).getText());
+                eligibleClick((JButton) ae.getSource());
                 checkWinCondition();
-                //TODO: Swap location of button
-            } else if (ae.getSource() == newGameButton){
+            } else if (ae.getSource() == newGameButton) {
                 newGame();
-            }
-            else if (ae.getSource() == winButton) {
-                for (int i = 0; i < buttonList.size()-1; i++) {
-                    buttonList.get(i).setText(String.valueOf(i+1));
+            } else if (ae.getSource() == winButton) {
+                for (int i = 0; i < buttonList.size() - 1; i++) {
+                    buttonList.get(i).setText(String.valueOf(i + 1));
                 }
                 buttonList.get(15).setText("");
-                checkWinCondition();
             }
         }
     }
