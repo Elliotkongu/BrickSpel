@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Elliot Åberg Fält
@@ -27,6 +29,8 @@ public class BrickGame extends JFrame {
     JButton button15 = new JButton("15");
     JButton button16 = new JButton();
     JButton newGame = new JButton("Nytt spel");
+    boolean isSelected = false;
+    JButton selectedButton;
 
     public BrickGame() {
         setLayout(new BorderLayout());
@@ -57,7 +61,25 @@ public class BrickGame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    class buttonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() != newGame && !isSelected) {
+                isSelected = true;
+                selectedButton = (JButton) ae.getSource();
+            } else if (ae.getSource()!= newGame && isSelected) {
+                //TODO: Swap the newly clicked button with the old/selected button
+            } else if (ae.getSource() == newGame){
+                //TODO: Randomise the buttons and clear selectedButton and isSelected when clicking newGame.
+            }
+        }
+    }
+
+
+
     public static void main(String[] args) {
         BrickGame b = new BrickGame();
     }
+
+
 }
