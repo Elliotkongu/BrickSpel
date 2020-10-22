@@ -88,6 +88,10 @@ public class BrickGame extends JFrame {
         return -1;
     }
 
+    /**
+     * Checks if the button pressed is eligible to be swapped with the empty tile.
+     * @param button The clicked button
+     */
     private void eligibleClick(JButton button) {
         int index = buttonList.indexOf(button);
         if (index % 4 != 0) {
@@ -107,6 +111,11 @@ public class BrickGame extends JFrame {
         }
     }
 
+    /**
+     * Checks if the tile on the checkIndex spot is the empty tile, if it is then swap the two.
+     * @param checkIndex The index that's going to be checked
+     * @param button The clicked button
+     */
     private void checkEmpty(int checkIndex, JButton button) {
         JButton checkButton = buttonList.get(checkIndex);
         if (checkButton.getText().equals("")) {
