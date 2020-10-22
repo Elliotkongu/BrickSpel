@@ -67,8 +67,9 @@ public class BrickGame extends JFrame {
         panel.setLayout(new GridLayout(4,4));
         for (JButton jButton : buttonList) {
             panel.add(jButton);
+            jButton.addActionListener(new buttonListener());
         }
-
+        newGame.addActionListener(new buttonListener());
         //Finishing touches
         pack();
         setVisible(true);
@@ -85,7 +86,15 @@ public class BrickGame extends JFrame {
             } else if (ae.getSource()!= newGame && isSelected) {
                 //TODO: Swap the newly clicked button with the old/selected button
             } else if (ae.getSource() == newGame){
-                //TODO: Randomise the buttons and clear selectedButton and isSelected when clicking newGame.
+                buttonList = randomiseButtons();
+                panel.revalidate();
+                panel.repaint();
+                for (JButton jButton:buttonList) {
+                    panel.add(jButton);
+                    jButton.addActionListener(new buttonListener());
+                }
+                isSelected = false;
+                selectedButton = null;
             }
         }
     }
