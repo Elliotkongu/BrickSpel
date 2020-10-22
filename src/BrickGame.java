@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Elliot Åberg Fält
@@ -33,6 +35,7 @@ public class BrickGame extends JFrame {
     JButton newGame = new JButton("Nytt spel");
     boolean isSelected = false;
     List<JButton> buttonList;
+    JButton selectedButton;
 
     private List<JButton> randomiseButtons() {
         List<JButton> buttonList = new ArrayList<>();
@@ -56,6 +59,7 @@ public class BrickGame extends JFrame {
         return buttonList;
     }
 
+
     public BrickGame() {
         add("South", panel);
         add("North", newGame);
@@ -71,6 +75,22 @@ public class BrickGame extends JFrame {
         setLocation(500,500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
+
+    class buttonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getSource() != newGame && !isSelected) {
+                isSelected = true;
+                selectedButton = (JButton) ae.getSource();
+            } else if (ae.getSource()!= newGame && isSelected) {
+                //TODO: Swap the newly clicked button with the old/selected button
+            } else if (ae.getSource() == newGame){
+                //TODO: Randomise the buttons and clear selectedButton and isSelected when clicking newGame.
+            }
+        }
+    }
+
+
 
     public static void main(String[] args) {
         BrickGame b = new BrickGame();
