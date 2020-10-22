@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,30 +32,26 @@ public class BrickGame extends JFrame {
     JButton button15 = new JButton("15");
     JButton button16 = new JButton();
     JButton newGame = new JButton("Nytt spel");
-    boolean isSelected = false;
+    List<JButton> buttonList;
     JButton selectedButton;
+    //For testing purposes
+    JButton winButton = new JButton("Vin spelet (Debug)");
 
     public BrickGame() {
-        setLayout(new BorderLayout());
-        add("North", panel);
-        add("South", newGame);
+        //Add the panel and newGame button to the window.
+        add("Center", panel);
+        add("North", newGame);
+        add("South", winButton);
+
+        //Shuffle the the list of buttons and add them to the panel
+        buttonList = randomiseButtons();
         panel.setLayout(new GridLayout(4,4));
-        panel.add(button1);
-        panel.add(button2);
-        panel.add(button3);
-        panel.add(button4);
-        panel.add(button5);
-        panel.add(button6);
-        panel.add(button7);
-        panel.add(button8);
-        panel.add(button9);
-        panel.add(button10);
-        panel.add(button11);
-        panel.add(button12);
-        panel.add(button13);
-        panel.add(button14);
-        panel.add(button15);
-        panel.add(button16);
+        for (JButton jButton : buttonList) {
+            panel.add(jButton);
+            jButton.addActionListener(new buttonListener());
+        }
+        newGame.addActionListener(new buttonListener());
+        winButton.addActionListener(new buttonListener());
 
         //Finishing touches
         pack();
@@ -61,16 +60,54 @@ public class BrickGame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    /**
+     * Put all buttons into a list and shuffle the list
+     * @return the shuffled list
+     */
+    private List<JButton> randomiseButtons() {
+        List<JButton> buttonList = new ArrayList<>();
+        buttonList.add(button1);
+        buttonList.add(button2);
+        buttonList.add(button3);
+        buttonList.add(button4);
+        buttonList.add(button5);
+        buttonList.add(button6);
+        buttonList.add(button7);
+        buttonList.add(button8);
+        buttonList.add(button9);
+        buttonList.add(button10);
+        buttonList.add(button11);
+        buttonList.add(button12);
+        buttonList.add(button13);
+        buttonList.add(button14);
+        buttonList.add(button15);
+        buttonList.add(button16);
+        Collections.shuffle(buttonList);
+        return buttonList;
+    }
+
+    private void winTheGame() {
+        JOptionPane.showMessageDialog(null, "Du vann!");
+        System.exit(0);
+    }
+
     class buttonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent ae) {
-            if (ae.getSource() != newGame && !isSelected) {
-                isSelected = true;
-                selectedButton = (JButton) ae.getSource();
-            } else if (ae.getSource()!= newGame && isSelected) {
-                //TODO: Swap the newly clicked button with the old/selected button
+            if (ae.getSource() != newGame && ae.getSource() != winButton) {
+                //TODO: Swap location of button
             } else if (ae.getSource() == newGame){
-                //TODO: Randomise the buttons and clear selectedButton and isSelected when clicking newGame.
+                buttonList = randomiseButtons();
+                panel.revalidate();
+                panel.repaint();
+                for (JButton jButton:buttonList) {
+                    panel.add(jButton);
+                    jButton.addActionListener(new buttonListener());
+                }
+                selectedButton = null;
+            }
+            else if (ae.getSource() == winButton) {
+                winTheGame();
             }
         }
     }
@@ -80,6 +117,4 @@ public class BrickGame extends JFrame {
     public static void main(String[] args) {
         BrickGame b = new BrickGame();
     }
-
-
 }
